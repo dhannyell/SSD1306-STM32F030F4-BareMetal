@@ -7,6 +7,8 @@ typedef enum
 }bool_t;
 
 static char SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+//display object
+SSD1306_t SSD1306;
 static bool_t Inverted = 0;
 void SSD1306_Init(void)
 {
