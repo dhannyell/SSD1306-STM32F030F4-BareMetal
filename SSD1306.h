@@ -12,6 +12,16 @@ typedef enum {
 	White = 0x01  /*!< Pixel is set. Color depends on LCD */
 } SSD1306_COLOR;
 
+//
+//  Struct to store transformations
+//
+typedef struct {
+	uint16_t CurrentX;
+	uint16_t CurrentY;
+	uint8_t Inverted;
+	uint8_t Initialized;
+} SSD1306_t;
+
 void SSD1306_Init(void);
 void SSD1306_Send_Command(char command);
 void SSD1306_Send_Data(char data);
@@ -20,3 +30,4 @@ void SSD1306_Fill(SSD1306_COLOR c);
 void ssd1306_UpdateScreen(void);
 void ssd1306_DrawPixel(uint8_t, uint8_t,uint8_t);
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
+void ssd1306_SetCursor(uint8_t x, uint8_t y);

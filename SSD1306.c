@@ -8,8 +8,6 @@ typedef enum
 
 static char SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 static bool_t Inverted = 0;
-int CurrentX = 0;
-int CurrentY = 0;
 void SSD1306_Init(void)
 {
 	
@@ -44,6 +42,16 @@ void SSD1306_Init(void)
 	SSD1306_Send_Command(0x14); //
 	SSD1306_Send_Command(0xAF); //--turn on SSD1306 panel
 	
+	// Clear screen
+	SSD1306_Fill(Black);
+
+	// Flush buffer to screen
+	ssd1306_UpdateScreen();
+
+	SSD1306.CurrentX = 0;
+	SSD1306.CurrentY = 0;
+
+	SSD1306.Initialized = 1;
 }
 
 
@@ -136,8 +144,8 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color)
 	uint32_t i, b, j;
 	
 	// See if there is still room on this line
-	if (SSD1306_WIDTH  <= (CurrentX + Font.FontWidth ) ||
-		  SSD1306_HEIGHT <= (CurrentY + Font.FontHeight))
+	if (SSD1306_WIDTH  <= (SSD1306.CurrentX + Font.FontWidth ) ||
+		  SSD1306_HEIGHT <= (SSD1306.CurrentY + Font.FontHeight))
 	{
 		// There is no more room
 		return 0;
@@ -151,18 +159,28 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color)
 		{
 			if ((b << j) & 0x8000) 
 			{
-				ssd1306_DrawPixel(CurrentX + j, (CurrentY + i), (SSD1306_COLOR) color);
+				ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR) color);
 			} 
 			else 
 			{
-				ssd1306_DrawPixel(CurrentX + j, (CurrentY + i), (SSD1306_COLOR)!color);
+				ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR)!color);
 			}
 		}
 	}
 	
 	// De huidige positie is nu verplaatst
-	CurrentX += Font.FontWidth;
+	SSD1306.CurrentX += Font.FontWidth;
 	
 	// We geven het geschreven char terug voor validatie
 	return ch;
+
+}
+
+//
+//	Position the cursor
+//
+void ssd1306_SetCursor(uint8_t x, uint8_t y)
+{
+	SSD1306.CurrentX = x;
+	SSD1306.CurrentY = y;
 }
