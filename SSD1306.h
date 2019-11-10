@@ -34,3 +34,4 @@ void ssd1306_SetCursor(uint8_t x, uint8_t y);
 void ssd1306_drawLineH(uint8_t x0, uint8_t x1, uint8_t y, uint8_t step);
 void ssd1306_drawLineV(int x, int y0, int y1, int step);
 void ssd1306_print(char text[], FontDef Font, SSD1306_COLOR color);
+void ssd1306_drawCircle(uint8_t x0, uint8_t y0, uint8_t r, SSD1306_COLOR color);

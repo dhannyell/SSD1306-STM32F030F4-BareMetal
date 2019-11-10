@@ -206,3 +206,39 @@ void ssd1306_print(char text[], FontDef Font, SSD1306_COLOR color){
 		ssd1306_WriteChar(text[i], Font, color);
 	}
 }
+
+void ssd1306_drawCircle(uint8_t x0, uint8_t y0, uint8_t r, SSD1306_COLOR color){
+#if defined(ESP8266)
+    yield();
+#endif
+    int16_t f = 1 - r;
+    int16_t ddF_x = 1;
+    int16_t ddF_y = -2 * r;
+    int16_t x = 0;
+    int16_t y = r;
+
+    ssd1306_DrawPixel(x0  , y0+r, color);
+    ssd1306_DrawPixel(x0  , y0-r, color);
+    ssd1306_DrawPixel(x0+r, y0  , color);
+    ssd1306_DrawPixel(x0-r, y0  , color);
+
+    while (x<y) {
+        if (f >= 0) {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x;
+
+        ssd1306_DrawPixel(x0 + x, y0 + y, color);
+        ssd1306_DrawPixel(x0 - x, y0 + y, color);
+        ssd1306_DrawPixel(x0 + x, y0 - y, color);
+        ssd1306_DrawPixel(x0 - x, y0 - y, color);
+        ssd1306_DrawPixel(x0 + y, y0 + x, color);
+        ssd1306_DrawPixel(x0 - y, y0 + x, color);
+        ssd1306_DrawPixel(x0 + y, y0 - x, color);
+        ssd1306_DrawPixel(x0 - y, y0 - x, color);
+    }
+}
