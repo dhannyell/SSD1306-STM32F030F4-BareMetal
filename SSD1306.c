@@ -186,3 +186,17 @@ void ssd1306_SetCursor(uint8_t x, uint8_t y)
 	SSD1306.CurrentX = x;
 	SSD1306.CurrentY = y;
 }
+
+void ssd1306_drawLineH(uint8_t x0, uint8_t x1, uint8_t y, uint8_t step)
+{
+  if(step>1) { if(((x0&1)==1 && (y&1)==0) || ((x0&1)==0 && (y&1)==1)) x0++; }
+  if(x1>x0) for(uint8_t x=x0; x<=x1; x+=step) ssd1306_DrawPixel(x,y,White);
+  else      for(uint8_t x=x1; x<=x0; x+=step) ssd1306_DrawPixel(x,y,White);
+}
+
+void ssd1306_drawLineV(int x, int y0, int y1, int step)
+{
+  if(step>1) { if(((x&1)==1 && (y0&1)==0) || ((x&1)==0 && (y0&1)==1)) y0++; }
+  if(y1>y0)for(int y=y0; y<=y1; y+=step) ssd1306_DrawPixel(x,y,1);
+  else     for(int y=y1; y<=y0; y+=step) ssd1306_DrawPixel(x,y,1);
+}
