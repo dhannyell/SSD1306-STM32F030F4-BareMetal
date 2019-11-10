@@ -200,3 +200,9 @@ void ssd1306_drawLineV(int x, int y0, int y1, int step)
   if(y1>y0)for(int y=y0; y<=y1; y+=step) ssd1306_DrawPixel(x,y,1);
   else     for(int y=y1; y<=y0; y+=step) ssd1306_DrawPixel(x,y,1);
 }
+
+void ssd1306_print(char text[], FontDef Font, SSD1306_COLOR color){
+	for(int i = 0; i<strlen(text);i++){
+		ssd1306_WriteChar(text[i], Font, color);
+	}
+}
